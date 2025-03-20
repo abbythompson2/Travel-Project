@@ -26,3 +26,15 @@ create table review(
   userID int,
   FOREIGN KEY (user) REFERENCES user(id)
 )
+
+
+
+
+*** CODE TO UPDATE TABLES ***
+drop table review
+
+** haven't done this yet **
+alter table user drop ID
+
+
+
