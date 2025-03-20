@@ -15,3 +15,14 @@ create table user(
     budget INT,
     FOREIGN KEY (userID) REFERENCES user(ID)
   )
+
+
+create table review(
+  id int PRIMARY KEY NOT NULL,
+  location varchar(255),
+  date DATE,
+  review varchar(255),
+  star int,
+  userID int,
+  FOREIGN KEY (user) REFERENCES user(id)
+)
