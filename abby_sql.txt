@@ -1,0 +1,17 @@
+create table user(
+  ID int PRIMARY KEY NOT NULL,
+  name varchar(255),
+  username varchar(255),
+  password varchar(255)
+  )
+
+
+  create table trip(
+    userID INT,
+    tripID INT PRIMARY KEY NOT NULL,
+    location varchar(255),
+    startDate DATE,
+    endDate DATE,
+    budget INT,
+    FOREIGN KEY (userID) REFERENCES user(ID)
+  )
