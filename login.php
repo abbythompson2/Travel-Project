@@ -8,15 +8,11 @@
 </head>
 <header>
     <div class="top">
-        <h1>Refined Recipes</h1>
-        <h4>Explore a variety of recipes and add your own!</h4>
+        <h1>Travel Planner</h1>
+        <h4>Start planning your today!</h4></h4>
     </div>
     <nav>
         <button class="button" onclick="location.href='Homepage.php'">Home</button>
-        <button class="button" onclick="location.href='db.php'">Add Recipe</button>
-        <button class="button" onclick="location.href='RecipeSearch.PHP'">Search for Recipe</button>
-        <button class="button" onclick="location.href='aboutUs.PHP'">About Us</button>
-        <button class="button" onclick="location.href='review.PHP'">Reviews</button>
         <?php
         if (isset($_SESSION['user_id'])) {
             echo '<button class="button" onclick="location.href=\'logout.PHP\'">Logout</button>';
