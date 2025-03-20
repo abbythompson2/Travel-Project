@@ -2,7 +2,7 @@ CREATE TABLE trip_expenses(
 expenseID int,
 tripID int,
 PRIMARY KEY (expenseID, tripID),
-FOREIGN KEY (expenseID) REFERENCES expenses(expenseID)
+FOREIGN KEY (expenseID) REFERENCES expenses(expenseID),
 FOREIGN KEY (tripID) REFERENCES trip(tripID)
 );
 
