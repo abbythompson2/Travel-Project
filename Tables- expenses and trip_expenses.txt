@@ -1,0 +1,13 @@
+CREATE TABLE trip_expenses(
+expenseID int,
+tripID int,
+PRIMARY KEY (expenseID, tripID),
+FOREIGN KEY (expenseID) REFERENCES expenses(expenseID)
+FOREIGN KEY (tripID) REFERENCES trip(tripID)
+);
+
+CREATE TABLE expenses(
+expenseID int AUTO_INCREMENT PRIMARY KEY,
+expense_name varchar(255) NOT NULL,
+expense_amount int
+);
