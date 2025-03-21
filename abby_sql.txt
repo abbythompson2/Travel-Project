@@ -1,40 +1,27 @@
-create table user(
-  ID int PRIMARY KEY NOT NULL,
-  name varchar(255),
-  username varchar(255),
-  password varchar(255)
-  )
+CREATE TABLE user (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  username VARCHAR(255),
+  password VARCHAR(255)
+);
 
+CREATE TABLE trip (
+  userID INT,
+  tripID INT AUTO_INCREMENT PRIMARY KEY,
+  location VARCHAR(255),
+  startDate DATE,
+  endDate DATE,
+  budget INT,
+  FOREIGN KEY (userID) REFERENCES user(ID)
+);
 
-  create table trip(
-    userID INT,
-    tripID INT PRIMARY KEY NOT NULL,
-    location varchar(255),
-    startDate DATE,
-    endDate DATE,
-    budget INT,
-    FOREIGN KEY (userID) REFERENCES user(ID)
-  )
-
-
-create table review(
-  id int PRIMARY KEY NOT NULL,
-  location varchar(255),
+CREATE TABLE review (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  location VARCHAR(255),
   date DATE,
-  review varchar(255),
-  star int,
-  userID int,
-  FOREIGN KEY (user) REFERENCES user(id)
-)
-
-
-
-
-*** CODE TO UPDATE TABLES ***
-drop table review
-
-** haven't done this yet **
-alter table user drop ID
-
-
+  review VARCHAR(255),
+  star INT,
+  userID INT,
+  FOREIGN KEY (userID) REFERENCES user(ID)
+);
 
