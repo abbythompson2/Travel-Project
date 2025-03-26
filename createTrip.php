@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "trip-project"; 
+
+try {
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} 
+catch (PDOException $e) {
+    error_log("Database Error: " . $e->getMessage());
+    die("An error occurred. Please try again later.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,72 +25,54 @@
 </head>
 <header>
     <div class="top">
-        <h1>Register</h1>
-        <h4>Create an account to have the ability to plan trips!</h4>
+        <h1>Create Trip</h1>
+        <h4>Create a trip to start planning!</h4>
     </div>
     <nav>
         <?php
-        if (isset($_SESSION['ID'])) {
-            echo '<button class="button" onclick="location.href=\'logout.PHP\'">Logout</button>';
-        }else{
-            echo '<button class="button" onclick="location.href=\'login.PHP\'">Login</button>';
+        if (isset($_SESSION['user_id'])) {
+            echo '<button class="button" onclick="location.href=\'logout.php\'">Logout</button>';
+        } else {
+            echo '<button class="button" onclick="location.href=\'login.php\'">Login</button>';
         }
         ?>   
     </nav>   
 </header>
 <body>
-<?php
-     $servername = "localhost";
-     $username = "root";
-     $password = "";
-     $dbname = "trip-project";    ## CHANGE THIS FOR YOUR DB NAME
- 
-     try {
-         $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-     } catch (PDOException $e) {
-         die("Connection failed: " . $e->getMessage());
-     }
-    
-    if(isset($_GET['error']) && $_GET['error'] == 1){
-        echo "<p>Login Failed.  Register Below!</p>";
-    }
-    ?>
 
-<form method="POST" action="register.php">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button class="submit" type="submit">Register</button>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!isset($_SESSION['user_id'])) {
+        echo "You must be logged in to create a trip.";
+        exit;
+    }
+
+    $budget = filter_input(INPUT_POST, 'budget', FILTER_SANITIZE_NUMBER_INT);
+    $endDate = htmlspecialchars($_POST['endDate']);
+    $startDate = htmlspecialchars($_POST['startDate']);
+    $location = htmlspecialchars($_POST['location']);
+    $userID = $_SESSION['user_id'];
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO trip (budget, endDate, location, startDate, userID) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$budget, $endDate, $location, $startDate, $userID]);
+
+        echo "Trip created successfully!";
+    } 
+    catch (PDOException $e) {
+        error_log("Error: " . $e->getMessage());
+        echo "An error occurred. Please try again.";
+    }
+}
+?>
+
+<form method="POST" action="">
+    <input type="number" name="budget" placeholder="Budget" required>
+    <input type="date" name="endDate" required>
+    <input type="date" name="startDate" required>
+    <input type="text" name="location" placeholder="Location" required>
+    <button class="submit" type="submit">Submit</button>
 </form>
 
-<?php
-
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = $_POST['name'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $password = password_hash($password, PASSWORD_BCRYPT);
-
-        try{
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE username = ?");
-            $stmt->execute([$username]);
-
-            if($stmt->fetchColumn()>0){
-                echo("Username already taken. Try another");
-            } 
-            
-            else{
-                $stmt = $pdo->prepare("INSERT INTO user (name, username, password) VALUES (?, ?, ?)");
-                $stmt->execute([$name, $username, $password]);
-
-                header("Location: login.php?registered=1");
-            }
-        } 
-        catch (PDOEXCEPTION $e) {
-            ("Error: " . $e->getMessage());
-        }
-    }
-?>
 </body>
 </html>
