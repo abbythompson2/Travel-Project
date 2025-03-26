@@ -21,58 +21,62 @@
     </nav>   
 </header>
 <body>
-<?php
-     $servername = "localhost";
-     $username = "root";
-     $password = "";
-     $dbname = "trip-project";    ## CHANGE THIS FOR YOUR DB NAME
+    <?php
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "travel_project_final";    ## CHANGE THIS FOR YOUR DB NAME
  
-     try {
-         $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-     } catch (PDOException $e) {
-         die("Connection failed: " . $e->getMessage());
-     }
+        try {
+            $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+             die("Connection failed: " . $e->getMessage());
+        }
     
-    if(isset($_GET['error']) && $_GET['error'] == 1){
-        echo "<p>Login Failed.  Register Below!</p>";
-    }
+        if(isset($_GET['error']) && $_GET['error'] == 1){
+            echo "<p>Login Failed.  Register Below!</p>";
+        }
     ?>
 
-<form method="POST" action="register.php">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button class="submit" type="submit">Register</button>
-</form>
+    <form method="POST" action="register.php">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button class="submit" type="submit">Register</button>
+    </form>
 
-<?php
+    <?php
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = $_POST['name'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $password = password_hash($password, PASSWORD_BCRYPT);
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $name = $_POST['name'];
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $password = password_hash($password, PASSWORD_BCRYPT);
 
-        try{
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE username = ?");
-            $stmt->execute([$username]);
+            try{
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE username = ?");
+                $stmt->execute([$username]);
 
-            if($stmt->fetchColumn()>0){
-                alert("Username already taken. Try another");
-            } 
+                if($stmt->fetchColumn()>0){
+                    echo'<script type="text/javascript">';
+                    echo'alert("Username already taken. Try another");';
+                    echo'</script>';
+                } 
             
-            else{
-                $stmt = $pdo->prepare("INSERT INTO user (name, username, password) VALUES (?, ?, ?)");
-                $stmt->execute([$name, $username, $password]);
+                else{
+                    $stmt = $pdo->prepare("INSERT INTO user (name, username, password) VALUES (?, ?, ?)");
+                    $stmt->execute([$name, $username, $password]);
 
-                header("Location: login.php?registered=1");
+                 header("Location: login.php?registered=1");
+                }
+            } 
+            catch (PDOEXCEPTION $e) {
+                echo'<script type="text/javascript">';
+                echo 'alert("Error: " . $e->getMessage());';
+                echo'</script>';
             }
-        } 
-        catch (PDOEXCEPTION $e) {
-            alert("Error: " . $e->getMessage());
         }
-    }
-?>
+    ?>
 </body>
 </html>
