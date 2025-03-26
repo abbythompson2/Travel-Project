@@ -7,16 +7,14 @@
 </head>
 <header>
     <div class="top">
-        <h1>Create Trip</h1>
-        <h4>Create a trip to start planning!</h4>
+        <h1>Register</h1>
+        <h4>Create an account to have the ability to plan trips!</h4>
     </div>
     <nav>
         <?php
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['ID'])) {
             echo '<button class="button" onclick="location.href=\'logout.PHP\'">Logout</button>';
-        }
-        
-        else{
+        }else{
             echo '<button class="button" onclick="location.href=\'login.PHP\'">Login</button>';
         }
         ?>   
@@ -32,40 +30,47 @@
      try {
          $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
          $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-     } 
-     
-     catch (PDOException $e) {
+     } catch (PDOException $e) {
          die("Connection failed: " . $e->getMessage());
      }
-
+    
+    if(isset($_GET['error']) && $_GET['error'] == 1){
+        echo "<p>Login Failed.  Register Below!</p>";
+    }
     ?>
 
 <form method="POST" action="register.php">
-    <input type="number" name="budget" placeholder="Budget" required>
-    <input type="date" name="endDate" placeholder="End Date" required>
-    <input type="date" name="startDate" placeholder="Start Date" required>
-    <input type="text" name="location" placeholder="Location" required>
-    <button class="submit" type="submit">Submit</button>
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button class="submit" type="submit">Register</button>
 </form>
 
 <?php
 
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $budget = $_POST['budget'];
-        $endDate = $_POST['endDate'];
-        $startDate = $_POST['startDate'];
-        $location = $_POST['location'];
-
+        $name = $_POST['name'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $password = password_hash($password, PASSWORD_BCRYPT);
 
         try{
-      
-        $stmt = $pdo->prepare("INSERT INTO trip (budget, endDate, location, startDate, userID) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$budget, $endDate, $location, $startDate, $_SESSION['user_id']]);
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE username = ?");
+            $stmt->execute([$username]);
 
+            if($stmt->fetchColumn()>0){
+                echo("Username already taken. Try another");
+            } 
             
+            else{
+                $stmt = $pdo->prepare("INSERT INTO user (name, username, password) VALUES (?, ?, ?)");
+                $stmt->execute([$name, $username, $password]);
+
+                header("Location: login.php?registered=1");
+            }
         } 
         catch (PDOEXCEPTION $e) {
-            alert("Error: " . $e->getMessage());
+            ("Error: " . $e->getMessage());
         }
     }
 ?>
