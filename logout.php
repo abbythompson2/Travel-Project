@@ -5,7 +5,7 @@
     session_unset();
     session_destroy();
 
-    header("Location:Homepage.php");
+    header("Location:home.php");
     exit();
 
 ?>
