@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_id'] = $user['ID'];
         header("Location: home.php");
         exit(); // Ensure that no further code runs after redirect
     } else {
