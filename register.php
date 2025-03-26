@@ -24,8 +24,8 @@
 <?php
      $servername = "localhost";
      $username = "root";
-     $password = "root";
-     $dbname = "trip project";    ## CHANGE THIS FOR YOUR DB NAME
+     $password = "";
+     $dbname = "trip-project";    ## CHANGE THIS FOR YOUR DB NAME
  
      try {
          $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -52,21 +52,24 @@
         $name = $_POST['name'];
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
+        $password = password_hash($password, PASSWORD_BCRYPT);
 
         try{
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE username = ?");
             $stmt->execute([$username]);
 
             if($stmt->fetchColumn()>0){
                 alert("Username already taken. Try another");
-            } else{
-                $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
-                $stmt->execute([$username, $email, $password_hash]);
+            } 
+            
+            else{
+                $stmt = $pdo->prepare("INSERT INTO user (name, username, password) VALUES (?, ?, ?)");
+                $stmt->execute([$name, $username, $password]);
 
                 header("Location: login.php?registered=1");
             }
-        } catch (PDOEXCEPTION $e) {
+        } 
+        catch (PDOEXCEPTION $e) {
             alert("Error: " . $e->getMessage());
         }
     }
