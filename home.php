@@ -15,9 +15,12 @@ session_start();
     </div>
     <nav>
         <?php
-        if (isset($_SESSION['ID'])) {
+        if (isset($_SESSION['user_id'])) {
             echo '<button class="button" onclick="location.href=\'logout.PHP\'">Logout</button>';
-        }else{
+            echo '<button class="button" onclick="location.href=\'createTrip.PHP\'">Create Trip</button>';
+        }
+        
+        else{
             echo '<button class="button" onclick="location.href=\'login.PHP\'">Login</button>';
         }
         ?>   
