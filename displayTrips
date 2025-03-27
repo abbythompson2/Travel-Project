@@ -1,5 +1,11 @@
 <?php
+ob_start();
 session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
+    $_SESSION['tripID'] = $_POST['tripID'];
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,12 +16,15 @@ session_start();
 </head>
 <header>
     <div class="top">
-        <h1>Travel Manager</h1>
+        <h1>Trips</h1>
         <h4>Welcome, here are all of your trips!</h4>
     </div>
     <nav>
+    <nav>
+        <button class="button" onclick="location.href='home.php'">Home</button> 
+        <button class="button" onclick="location.href='logout.php'">Logout</button> 
+    </nav> 
         <?php
-
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -25,37 +34,29 @@ session_start();
             $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } 
-
-
         catch (PDOException $e) {
             error_log("Database Error: " . $e->getMessage());
             die("An error occurred. Please try again later.");
         }
 
-
-
-
         if (isset($_SESSION['user_id'])) {
-            echo '<button class="button" onclick="location.href=\'logout.PHP\'">Logout</button>';
             echo '<button class="button" onclick="location.href=\'createTrip.PHP\'">Create Trip</button>';
-
 
             $stmt = $pdo->prepare("SELECT * FROM trip WHERE userID = ?");
             $stmt->execute([$_SESSION['user_id']]);
             $trips = $stmt->fetchAll();
 
             if (count($trips) >= 1) {
-                echo "<h2>Your Trips:</h2>";
-                echo "<ul>";
                 foreach ($trips as $trip) {
-                    echo "<li>" . htmlspecialchars($trip['startDate']) . " - " . htmlspecialchars($trip['endDate']) . htmlspecialchars($trip['location']) . "</li>";
+                    echo "<li>" . htmlspecialchars($trip['startDate']) . " - " . htmlspecialchars($trip['endDate']) . ", " . htmlspecialchars($trip['location']) . "</li>";
+                    echo '<form method="POST" style="display:inline;">
+                            <input type="hidden" name="tripID" value="' . htmlspecialchars($trip['tripID']) . '">
+                            <button type="submit" onclick="location.href=\'review.PHP\'" class="button">Review</button>
+                            <button type="submit" onclick="location.href=\'budget.PHP\'" class="button">Budget</button>
+                          </form>';
                 }
-                echo "</ul>";
             }
-
-        }
-        
-        else{
+        } else {
             echo '<button class="button" onclick="location.href=\'login.PHP\'">Login</button>';
         }
         ?>   
@@ -64,6 +65,6 @@ session_start();
 <body>
 </body>
 <footer>
-
 </footer>
 </html>
+<?php ob_end_flush(); ?>
