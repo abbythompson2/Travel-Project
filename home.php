@@ -45,7 +45,8 @@ session_start();
             $trips = $stmt->fetchAll();
 
             if (count($trips) >= 1) { 
-                echo "You have a trip!";
+                header("Location: displayTrips.php");
+                exit();
             }
 
         }
