@@ -4,9 +4,24 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
     $_SESSION['tripID'] = $_POST['tripID'];
-    exit();
+    // Redirect to the specific page after setting the session
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'review':
+                header('Location: review.php');
+                break;
+            case 'budget':
+                header('Location: budget.php');
+                break;
+            default:
+                header('Location: home.php');
+                break;
+        }
+        exit();
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
         <h4>Welcome, here are all of your trips!</h4>
     </div>
     <nav>
-    <nav>
-        <button class="button" onclick="location.href='home.php'">Home</button> 
-        <button class="button" onclick="location.href='logout.php'">Logout</button> 
-    </nav> 
+        <button class="button" onclick="location.href='home.php'">Home</button>
+        <button class="button" onclick="location.href='logout.php'">Logout</button>
         <?php
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "trip-project"; 
+        $dbname = "trip-project";
 
         try {
             $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -46,21 +59,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
             $stmt->execute([$_SESSION['user_id']]);
             $trips = $stmt->fetchAll();
 
-            if (count($trips) >= 1) {
+             if (count($trips) >= 1) {
                 foreach ($trips as $trip) {
                     echo "<li>" . htmlspecialchars($trip['startDate']) . " - " . htmlspecialchars($trip['endDate']) . ", " . htmlspecialchars($trip['location']) . "</li>";
                     echo '<form method="POST" style="display:inline;">
-                            <input type="hidden" name="tripID" value="' . htmlspecialchars($trip['tripID']) . '">
-                            <button type="submit" onclick="location.href=\'review.PHP\'" class="button">Review</button>
-                            <button type="submit" onclick="location.href=\'budget.PHP\'" class="button">Budget</button>
-                          </form>';
+                    <input type="hidden" name="tripID" value="' . htmlspecialchars($trip['tripID']) . '" />
+                    <button type="submit" class="button" name="action" value="review">Review</button>
+                    <button type="submit" class="button" name="action" value="budget">Budget</button>
+                  </form>';
+        
                 }
             }
-        } else {
-            echo '<button class="button" onclick="location.href=\'login.PHP\'">Login</button>';
         }
-        ?>   
-    </nav>   
+        ?>
+    </nav>
 </header>
 <body>
 </body>
