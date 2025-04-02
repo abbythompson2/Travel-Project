@@ -9,7 +9,7 @@
 
     <h1>General Information</h1>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQgyVs3mPAIybjdo3kGo948f3DR65qFdE&libraries=places" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEYE&libraries=places" async defer></script>
 
 
 
@@ -116,7 +116,7 @@ document.getElementById("currency-form").addEventListener("submit", async functi
     let fromCurrency = document.getElementById("from").value;
     let toCurrency = document.getElementById("to").value;
 
-    let apiKey = "d2361c79d1c2f97086664a55";  // Replace with your actual API key
+    let apiKey = "API_KEY";  // Replace with your actual API key
     let url = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${fromCurrency}`;
 
     try {
@@ -157,8 +157,8 @@ if (isset($_SESSION['tripID'])) {
 
     async function fetchLocalTime(location) {
     try {
-        let geocodeApiKey = "AIzaSyAQgyVs3mPAIybjdo3kGo948f3DR65qFdE";
-        let timeZoneApiKey = "AIzaSyAQgyVs3mPAIybjdo3kGo948f3DR65qFdE"; 
+        let geocodeApiKey = "API_KEY";
+        let timeZoneApiKey = "API_KEY"; 
 
 
 
