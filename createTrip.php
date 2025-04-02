@@ -10,6 +10,8 @@ try {
     $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } 
+
+
 catch (PDOException $e) {
     error_log("Database Error: " . $e->getMessage());
     die("An error occurred. Please try again later.");
@@ -29,6 +31,10 @@ catch (PDOException $e) {
         <h4>Create a trip to start planning!</h4>
     </div>
     <nav>
+    <nav>
+        <button class="button" onclick="location.href='home.php'">Home</button> 
+        <button class="button" onclick="location.href='logout.php'">Logout</button> 
+    </nav> 
         <?php
         if (isset($_SESSION['user_id'])) {
             echo '<button class="button" onclick="location.href=\'logout.php\'">Logout</button>';
@@ -39,6 +45,18 @@ catch (PDOException $e) {
     </nav>   
 </header>
 <body>
+
+    <script>
+        function initAutocomplete() {
+            new google.maps.places.Autocomplete(document.getElementById("location"));
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places&callback=initAutocomplete" async defer></script>
+
+
+
+
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -58,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute([$budget, $endDate, $location, $startDate, $userID]);
 
         echo "Trip created successfully!";
+        header("Location: home.php");
+        exit();
     } 
     catch (PDOException $e) {
         error_log("Error: " . $e->getMessage());
@@ -70,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <input type="number" name="budget" placeholder="Budget" required>
     <input type="date" name="endDate" required>
     <input type="date" name="startDate" required>
-    <input type="text" name="location" placeholder="Location" required>
+    <input type="text" name="location" id="location" placeholder="Location" required>
     <button class="submit" type="submit">Submit</button>
 </form>
 
