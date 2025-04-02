@@ -13,6 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
             case 'budget':
                 header('Location: budget.php');
                 break;
+            case 'navigation':
+                header('Location: navigation.php');
+                break;
+            case 'information':
+                header('Location: generalInformation.php');
+                break;
             default:
                 header('Location: home.php');
                 break;
@@ -66,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tripID'])) {
                     <input type="hidden" name="tripID" value="' . htmlspecialchars($trip['tripID']) . '" />
                     <button type="submit" class="button" name="action" value="review">Review</button>
                     <button type="submit" class="button" name="action" value="budget">Budget</button>
+                    <button type="submit" class="button" name="action" value="navigation">Navigation</button>
+                    <button type="submit" class="button" name="action" value="information">General Information</button>
                   </form>';
         
                 }
