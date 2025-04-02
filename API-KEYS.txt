@@ -1,0 +1,8 @@
+Google Maps API
+https://console.cloud.google.com/google/maps-apis/overview?invt=AbttIQ&project=flash-garage-447801-d9
+
+Exchange Rate API
+https://www.exchangerate-api.com/
+
+Libre Translate API - this one was a little weird to set up so lmk if you have issues
+https://libretranslate.com/
