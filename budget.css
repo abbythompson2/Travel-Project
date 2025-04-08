@@ -1,0 +1,92 @@
+*{
+    background-color:blanchedalmond;
+    
+}
+h1{
+    background-color: #BAE0F3;
+    color: #F6F7F0;
+    border: 1px solid black;
+    width:20em;
+    margin: 10px auto;
+    text-align: center;
+}
+h4{
+    color: #6CBDE9;
+    font-weight: bold;
+    text-align: center;
+}
+.expenses{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin: 20px 0;
+
+}
+.expense{
+    background-color: #B7E4C7;
+    border: #74C69D solid 2px;
+    width: 20vh;
+    width: calc(25% - 20px);
+    box-sizing: border-box;
+
+ 
+}
+.expense p{
+    color: #F6F7F0;
+    margin: 0 0 5px;
+    font-size: 14px;
+    background-color: #B7E4C7;
+}
+form{
+    background: #74C69D;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: 20vw;
+    width: 30vw;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rbga(0,0,0,0.1);
+    border-color: black;
+
+}
+form input, form button{
+    margin: 10px 0;
+}
+form input{
+    background-color: white;
+}
+button{
+    background-color: #74C69D;
+    color: #F6F7F0;
+    border-radius: 15px;
+
+}
+button:hover{
+    background-color: #B7E4C7;
+}
+nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+h3{
+    color:#F6F7F0;
+    font-weight: bold;
+    background-color: #B7E4C7;
+    padding: 5px;
+    border: black 1px solid;
+
+}
+.center-button{
+    margin: 0 auto;
+}
