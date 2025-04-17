@@ -20,6 +20,7 @@ die("An error occurred. Please try again later.");
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="budget.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Manager</title>
@@ -43,11 +44,14 @@ if (isset($_SESSION['user_id'])) {
 </header>
 
 <body>
-    <form method="POST" action="budget.php">
-        <input type="text" name="expense_name" placeholder="expense name" required>
-        <input type="number" name="expense_amount" placeholder="expense amount" required>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="form-container">
+        <form method="POST" action="budget.php">
+            <h3>Enter a expense</h3>
+            <input type="text" name="expense_name" placeholder="expense name" required>
+            <input type="number" name="expense_amount" placeholder="expense amount" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 
     <?php
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -74,6 +78,9 @@ if (isset($_SESSION['user_id'])) {
 $stmt = $pdo->prepare("SELECT expenseID FROM trip_expenses WHERE tripID = ?");
          $stmt->execute([$_SESSION['tripID']]);
          $expense_IDs = $stmt->fetchAll();
+
+         echo"<div class='expenses'>";
+         
          if (count($expense_IDs)>=1){
             foreach ($expense_IDs as $expenseID){
                 $stmt = $pdo->prepare("SELECT * FROM expenses WHERE  expenseID=?");
@@ -86,8 +93,8 @@ $stmt = $pdo->prepare("SELECT expenseID FROM trip_expenses WHERE tripID = ?");
                 echo "</div>";
             }
 
-
          }
+         echo "</div>";
 
 ?>    
 </body>
