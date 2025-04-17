@@ -1,27 +1,36 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="budget.css">
+    <link rel="stylesheet" href="weather.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather</title>
 </head>
+
 <header>
     <div class="top">
         <h1>Travel Manager</h1>
         <h4>Manage all the details of your trip!</h4>
     </div>
+    <nav>
+         <button class="button" onclick="location.href='home.php'">Home</button> 
+         <button class="button" onclick="location.href='logout.php'">Logout</button> 
+     </nav>  
 </header>
 <body>
-    <form>
-        <input type="text" name="cityName" id="city_input" placeholder="Enter City Name" required>
+    <div id="form-container" class="form-container">
+        <form id="weather-form">
+            <input type="text" name="cityName" id="city_input" placeholder="Enter City Name" required>
        
-        <button type="submit" id="searchBtn">Submit</button>
-    </form>
+            <button type="submit" id="searchBtn">Submit</button>
+        </form>
+    </div>
 
-    <div class="card">
-        <h2>Forecast</h2>
-        <div id="forecast-today" class="forecast-wrapper">
+    
+    <div  id="card" class="card" style="display:none;">
+    <h2>Forecast</h2>
+        <div id="forecast-today" class="forecast-wrapper" >
             <div class="forecast-item">
                 <span>___&deg;C</span>
                 <span>___&deg;C</span>
@@ -85,6 +94,14 @@
 </body>
 
 <script>
+    document.getElementById('weather-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        document.getElementById('card').style.display ='flex';
+        this.reset();
+    });
+</script>
+
+<script>
     // Replace with your OpenWeatherMap API key
     const apiKey = '13126d9f12f3d37576962945667ee65a';
     const searchBtn = document.getElementById('searchBtn');
@@ -95,6 +112,7 @@
     searchBtn.addEventListener('click', function(event){
         event.preventDefault();
         getCityCoordinates();
+        this.reset();
     });
 
    
@@ -202,12 +220,13 @@ fetch(FORECAST_API_URL)
                 </div>
             `;
         });
+        document.getElementById('card').style.display='flex';
 
     })
     .catch(err => {
         console.error("Error rendering forecast:", err);
         alert('Failed to fetch current weather');
     });
-
     }
-    </script>
+</script>
+</html>
