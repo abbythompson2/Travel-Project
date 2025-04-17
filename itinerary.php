@@ -42,6 +42,7 @@ $period = new DatePeriod($start, $interval, $end);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="itinerary.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Manager</title>
@@ -61,7 +62,7 @@ $period = new DatePeriod($start, $interval, $end);
         ?>
     </nav>
 </header>
-
+<div class="Daily-Section">
 <?php foreach($period as $date): ?>
     <div class='Day'>
         <h2><?= $date->format('m-d-y') ?></h2>
@@ -73,6 +74,13 @@ $period = new DatePeriod($start, $interval, $end);
         $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>
 
+        <form method='POST' action='itinerary.php'>
+            <h3>Add an event</h3>
+            <input type='text' name='event_name' placeholder='Event name' required>
+            <input type='hidden' name='event_date' value='<?= $date->format('Y-m-d') ?>'>
+            <button type='submit'>Submit</button>
+        </form>
+
         <?php if (count($events) > 0): ?>
             <?php foreach ($events as $event): ?>
                 <div class='event'>
@@ -83,12 +91,6 @@ $period = new DatePeriod($start, $interval, $end);
             <p>No events for this day yet.</p>
         <?php endif; ?>
 
-        <form method='POST' action='itinerary.php'>
-            <h3>Add an event</h3>
-            <input type='text' name='event_name' placeholder='Event name' required>
-            <input type='hidden' name='event_date' value='<?= $date->format('Y-m-d') ?>'>
-            <button type='submit'>Submit</button>
-        </form>
     </div>
 <?php endforeach; ?>
 </div>
